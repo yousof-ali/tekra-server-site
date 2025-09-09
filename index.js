@@ -3,7 +3,7 @@ const app = express();
 const cors = require("cors");
 require('dotenv').config();
 const port = process.env.PORT || 5000;
-const { MongoClient, ServerApiVersion, Collection } = require('mongodb');
+const { MongoClient, ServerApiVersion } = require('mongodb');
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.lewcb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
@@ -36,7 +36,13 @@ async function run() {
 
     // Collection
 
-    const productCollections = Collection
+    const productCollections = client.db('tekraDB').collection('products');
+
+    // get all product 
+    app.get('/products',async(req,res) => {
+        const result = await productCollections.find().toArray();
+        res.send(result);
+    });
 
 
 
