@@ -3,7 +3,7 @@ const app = express();
 const cors = require("cors");
 require('dotenv').config();
 const port = process.env.PORT || 5000;
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.lewcb.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
@@ -42,6 +42,14 @@ async function run() {
     app.get('/products',async(req,res) => {
         const result = await productCollections.find().toArray();
         res.send(result);
+    });
+
+    // get single product 
+    app.get('/product/:id',async(req,res) => {
+      const id = req.params.id;
+      const query = {_id: new ObjectId(id)};
+      const result = await productCollections.findOne(query);
+      res.send(result);
     });
 
 
