@@ -37,6 +37,7 @@ async function run() {
     // Collection
 
     const productCollections = client.db('tekraDB').collection('products');
+    const reviewCOllections = client.db('tekraDB').collection('reviews');
 
     // get all product 
     app.get('/products',async(req,res) => {
@@ -51,6 +52,20 @@ async function run() {
       const result = await productCollections.findOne(query);
       res.send(result);
     });
+
+    //reviews 
+    app.get('/reviews/:id',async(req,res) => {
+      const pID = req.params.id;
+      const query = {productId : pID};
+      const result = await reviewCOllections.find(query).toArray();
+      res.send(result);
+    });
+
+    app.post('/review',async(req,res) => {
+      const body = req.body;
+      const result = await reviewCOllections.insertOne(body);
+      res.send(result);
+    })
 
 
 
